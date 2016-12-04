@@ -35,10 +35,9 @@ void Operation (Matrix m, Pipeline<Vector>& from, Pipeline<Vector>& to,int size)
 int main()
 {
 	std::vector<Matrix> operations;
-	Pipeline<Vector> points;
 
-	std::ifstream input_matrices("0/input_matrices.txt");
-	std::ifstream input_points("0/input_points.txt");
+	std::ifstream input_matrices("input_matrices.txt");
+	std::ifstream input_points("input_points.txt");
 
 	unsigned int M;
 	unsigned int N;
@@ -68,10 +67,10 @@ int main()
 	{
 		threads.push_back(std::thread(Operation, operations[i], std::ref(pipelines[i]), std::ref(pipelines[i+1]),N));
 	}
-
-
-	//Read
 	
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+
 	//READ POINTS
 	for (int i = 0; i<N; ++i)
 	{
@@ -86,9 +85,6 @@ int main()
 		pipelines[0].push(point);
 	}
 	//Read end
-
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-    start = std::chrono::system_clock::now();
 
     for(auto& t : threads)
     {
@@ -112,11 +108,7 @@ int main()
 	std::ofstream output("output.txt");
 	for(auto& v : results)
 	{
-		for(int i=0;i<3;++i)
-		{
-			output << v[i] << " ";
-		}
-		output<<std::endl;
+		output << v[0] << " " << v[1] << " " << v[2] << std::endl;
 	}
 	output.close();
 	return 0;
